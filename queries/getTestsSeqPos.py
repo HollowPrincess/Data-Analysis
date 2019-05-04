@@ -25,23 +25,30 @@ def getListsOfProblemsVertical():
                     finalExam=filename[:-4]
                 if name=='graded' and value=='true':
                     isGraded=True
-                    gradedProblemsArray.append(filename[:-4])
                     
         if not isGraded:
             rem = xmldoc.getElementsByTagName('vertical')
             if xmldoc.getElementsByTagName('problem'):
                 problem_id=xmldoc.getElementsByTagName('problem')[0].getAttribute("url_name")
                 ungradedProblemsArray.append([filename[:-4],problem_id])
+        else:
+            em = xmldoc.getElementsByTagName('vertical')
+            if xmldoc.getElementsByTagName('openassessment'):
+                problem_id=xmldoc.getElementsByTagName('openassessment')[0].getAttribute("url_name")
+                gradedProblemsArray.append([filename[:-4],problem_id])
     return gradedProblemsArray,ungradedProblemsArray,finalExam     
 
 def getListsOfProblemsSequential():
     gradedProblemsVertArray,ungradedProblemsVertArray, finalExamVert = getListsOfProblemsVertical()
     ungradedProblemsDF=pd.DataFrame(ungradedProblemsVertArray,columns=['vert_id','problem_id'])
+    gradedProblemsDF=pd.DataFrame(gradedProblemsVertArray,columns=['vert_id','problem_id'])
+    
     DATA_DIR=BASE_DIR+'\\sequential'
     filesList=os.listdir(path=DATA_DIR)
     gradedProblemsSeqArray=[]
     ungradedProblemsSeqArray=[]
     finalExamSeq=[]
+    
     for filename in filesList:
         xmldoc = minidom.parse(DATA_DIR+'\\'+filename)
         node = xmldoc.documentElement
@@ -53,8 +60,9 @@ def getListsOfProblemsSequential():
             attrib=vertical.attributes.items()
             currentVertName=attrib[0][1]
             position+=1
-            if currentVertName in gradedProblemsVertArray:
-                tmpDict = [filename[:-4], position]
+            if currentVertName in list(gradedProblemsDF['vert_id']):
+                problem_id=list(gradedProblemsDF.loc[gradedProblemsDF['vert_id']==currentVertName]['problem_id'])[0]
+                tmpDict = [filename[:-4], position, problem_id]
                 gradedProblemsSeqArray.append(tmpDict)
             elif currentVertName in list(ungradedProblemsDF['vert_id']):
                 problem_id=list(ungradedProblemsDF.loc[ungradedProblemsDF['vert_id']==currentVertName]['problem_id'])[0]

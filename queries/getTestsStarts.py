@@ -8,7 +8,7 @@ import pandas as pd
 
 from .getTestsSeqPos import getListsOfProblemsSequential
 gradedProblemsSeqArray, ungradedProblemsSeqArray, finalExamSeq=getListsOfProblemsSequential() 
-gradedProblemsSeqArray=pd.DataFrame(gradedProblemsSeqArray, columns = ['seq','pos'])
+gradedProblemsSeqArray=pd.DataFrame(gradedProblemsSeqArray, columns = ['seq','pos','problem_id'])
 ungradedProblemsSeqArray=pd.DataFrame(ungradedProblemsSeqArray, columns = ['seq','pos','problem_id'])
 
 body={
@@ -57,6 +57,9 @@ def ret():
 
             if int(position) in list(gradedProblemsSeqArray.loc[gradedProblemsSeqArray['seq'] == sequence]['pos']):
                 problemFlag='graded'
+                tmpdf=gradedProblemsSeqArray.loc[gradedProblemsSeqArray['seq'] == sequence]
+                tmpdf=tmpdf.loc[tmpdf['pos'] == int(position)]
+                problem_id=list(tmpdf['problem_id'])[0]
             elif int(position) in list(ungradedProblemsSeqArray.loc[ungradedProblemsSeqArray['seq'] == sequence]['pos']):
                 problemFlag='ungraded'
                 tmpdf=ungradedProblemsSeqArray.loc[ungradedProblemsSeqArray['seq'] == sequence]
