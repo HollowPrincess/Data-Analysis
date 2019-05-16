@@ -3,9 +3,9 @@ import dateutil.parser
 import time
 
 from queries.getVideoStartAndEnd import ret as videoActionsGenerator
-#videoStateDF=pd.DataFrame(videoActionsGenerator()).sort_values(by=['time'])
+videoStateDF=pd.DataFrame(videoActionsGenerator()).sort_values(by=['time'])
 #videoStateDF.to_csv(path_or_buf='video_actions_time.csv',index=False)
-videoStateDF = pd.read_csv('video_actions_time.csv', sep=',', encoding='utf-8')
+#videoStateDF = pd.read_csv('video_actions_time.csv', sep=',', encoding='utf-8')
 
 def getDuration():
     users=videoStateDF['user_id'].unique()
