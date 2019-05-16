@@ -8,32 +8,33 @@ from queries.getTestsStarts import ret as getTestsStartsGenerator
 from queries.getSubmissionsTime import ret as getTestsEndsGenerator
 from queries.getSubTimeForOpenAssess import ret as getAssessEndsGenerator
 
-ProblemStartsDF=pd.DataFrame(getTestsStartsGenerator()).sort_values(by=['time'])
-#ProblemStartsDF.to_csv(path_or_buf='problems_starts_time.csv',index=False)
-
-ProblemEndsDF=pd.DataFrame(getTestsEndsGenerator()).sort_values(by=['time'])
-#ProblemEndsDF.to_csv(path_or_buf='problems_ends_time.csv',index=False)
-
-AssessEndsDF=pd.DataFrame(getAssessEndsGenerator()).sort_values(by=['time'])
-#AssessEndsDF.to_csv(path_or_buf='assess_ends_time.csv',index=False)
-
-"""
-ProblemStartsDF = pd.read_csv('problems_starts_time.csv', sep=',', encoding='utf-8')
-ProblemEndsDF = pd.read_csv('problems_ends_time.csv', sep=',', encoding='utf-8')
-AssessEndsDF = pd.read_csv('assess_ends_time.csv', sep=',', encoding='utf-8')
-"""
-problems=ProblemStartsDF['problem_id'].unique()
-durationDF=[]
 
 def getDuration():
+    ProblemStartsDF=pd.DataFrame(getTestsStartsGenerator()).sort_values(by=['time'])
+    #ProblemStartsDF.to_csv(path_or_buf='problems_starts_time.csv',index=False)
+    
+    ProblemEndsDF=pd.DataFrame(getTestsEndsGenerator()).sort_values(by=['time'])
+    #ProblemEndsDF.to_csv(path_or_buf='problems_ends_time.csv',index=False)
+    
+    AssessEndsDF=pd.DataFrame(getAssessEndsGenerator()).sort_values(by=['time'])
+    #AssessEndsDF.to_csv(path_or_buf='assess_ends_time.csv',index=False)
+    
+    """
+    ProblemStartsDF = pd.read_csv('problems_starts_time.csv', sep=',', encoding='utf-8')
+    ProblemEndsDF = pd.read_csv('problems_ends_time.csv', sep=',', encoding='utf-8')
+    AssessEndsDF = pd.read_csv('assess_ends_time.csv', sep=',', encoding='utf-8')
+    """
+    problems=ProblemStartsDF['problem_id'].unique()
+    durationDF=[]
     for problem in problems:
         tmpDf=ProblemStartsDF.loc[ProblemStartsDF['problem_id']==problem]
         users=tmpDf['user_id']
         theme_id=list(tmpDf['theme_id'])[0]
         course_id=list(tmpDf['course_id'])[0]
         problem_type=list(tmpDf['problem_type'])[0]
-        time_problem_start=list(ProblemStartsDF.loc[ProblemStartsDF['problem_id']==problem].loc[ProblemStartsDF['user_id']==user]['time'])
+        
         for user in users:
+            time_problem_start=list(ProblemStartsDF.loc[ProblemStartsDF['problem_id']==problem].loc[ProblemStartsDF['user_id']==user]['time'])
             if problem_type=='graded':
                 time_problem_end=list(AssessEndsDF.loc[AssessEndsDF['problem_id']==problem].loc[AssessEndsDF['user_id']==user]['time'])           
             else:
