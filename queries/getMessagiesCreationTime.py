@@ -29,7 +29,7 @@ body={
 
 def ret():
     for hit in scan(es,
-         index="online_courses", 
+         index="online_courses_full", 
          query=body
         ):        
         if hit.get("_source"):

@@ -46,8 +46,10 @@ def getDuration():
                 problem_duration=(dateutil.parser.parse(time_problem_start[time_problem_start.index(endtime)])
                                   -
                                   dateutil.parser.parse(time_problem_start[time_problem_start.index(endtime)-1])).total_seconds()
-                if problem_duration<0:
-                    problem_duration=0
+            if len(time_problem_end)==0:
+                problem_duration=0
+            if not problem_duration>=0:
+                problem_duration=0
                     
             durationDF.append([course_id,theme_id,problem_type,problem,problem_duration,user])
     durationDF=pd.DataFrame(durationDF,columns=['course_id','theme_id','problem_type','problem_id','problem_duration','user_id'])
