@@ -46,7 +46,8 @@ def ret():
                     "time":hit.get("_source").get("time"),
                     "attempt_num":hit.get("_source").get("event").get("attempts"),
                     "theme_id":hit.get("_source").get("referer").split('courseware/')[-1].split('/')[1],
-                    "problem_id":hit.get("_source").get("event").get("problem_id").split('problem+block@')[-1]
+                    "problem_id":hit.get("_source").get("event").get("problem_id").split('problem+block@')[-1],
+                    "submission":hit.get("_source").get("event").get("submission")
         }
             
         
