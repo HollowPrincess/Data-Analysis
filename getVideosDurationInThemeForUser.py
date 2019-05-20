@@ -21,7 +21,7 @@ def getDuration():
                     video_id=row[1]['video_id']
                     theme_id=row[1]['theme_id']
                 start_time=row[1]['time']
-            elif start_time:
+            elif start_time and video_id==row[1]['video_id']:
                 current_time=row[1]['time']
                 duration=(dateutil.parser.parse(current_time)-dateutil.parser.parse(start_time)).total_seconds()
                 videoDurationDF.append([course_id,theme_id,user,video_id,duration])
