@@ -15,13 +15,20 @@ def getDuration():
         start_time=False
         timeSequence=videoStateDF.loc[videoStateDF['user_id']==user].sort_values(by='time')
         video_id=0
+        playFlag=False
         for row in timeSequence.iterrows():
-            if row[1]['isPlaying']:
+            if row[1]['isPlaying']:                
                 if video_id!=row[1]['video_id']:
                     video_id=row[1]['video_id']
-                    theme_id=row[1]['theme_id']
+                    theme_id=row[1]['theme_id']  
+                if playFlag:
+                    current_time=row[1]['time']
+                    duration=(dateutil.parser.parse(current_time)-dateutil.parser.parse(start_time)).total_seconds()
+                    videoDurationDF.append([course_id,theme_id,user,video_id,duration])
                 start_time=row[1]['time']
+                playFlag=True
             elif start_time:
+                playFlag=False
                 current_time=row[1]['time']
                 duration=(dateutil.parser.parse(current_time)-dateutil.parser.parse(start_time)).total_seconds()
                 videoDurationDF.append([course_id,theme_id,user,video_id,duration])

@@ -12,17 +12,10 @@ body={
     ],
     "query": {
         "bool":{
-            "should":[                
+            "must":              
                 {"wildcard":{
-                    "event_type": "*response_created"
-                }},
-                {"wildcard":{
-                    "event_type": "*/threads/create"
-                }},
-                {"wildcard":{
-                    "event_type": "*comment.created"
+                    "event_type": "*problem_show*"
                 }}           
-            ]           
         }
     }
 }
@@ -37,4 +30,4 @@ def ret():
                 "user_id":hit.get("_source").get("context").get("user_id"),
                 "course_id":hit.get("_source").get("context").get("course_id"),
                 "time":hit.get("_source").get("time")
-        }
+            }

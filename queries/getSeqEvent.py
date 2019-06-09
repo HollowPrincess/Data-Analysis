@@ -1,7 +1,6 @@
 from elasticsearch import Elasticsearch
 import requests
 from  elasticsearch.helpers import scan as scan
-
 es = Elasticsearch([{"host": "localhost", "port": 9200}])
 
 body={
@@ -13,16 +12,16 @@ body={
     "query": {
         "bool":{
             "should":[                
-                {"wildcard":{
-                    "event_type": "*response_created"
+                {"match_phrase":{
+                    "event_type": "seq_next"
+                }},
+                {"match_phrase":{
+                    "event_type": "seq_prev"
                 }},
                 {"wildcard":{
-                    "event_type": "*/threads/create"
-                }},
-                {"wildcard":{
-                    "event_type": "*comment.created"
+                    "event_type": "*goto_position"
                 }}           
-            ]           
+            ]         
         }
     }
 }
@@ -33,8 +32,9 @@ def ret():
          query=body
         ):        
         if hit.get("_source"):
-            yield {                    
+            yield {         
                 "user_id":hit.get("_source").get("context").get("user_id"),
                 "course_id":hit.get("_source").get("context").get("course_id"),
-                "time":hit.get("_source").get("time")
-        }
+                "time":hit.get("_source").get("time"),
+                "action":'seq'
+            }
